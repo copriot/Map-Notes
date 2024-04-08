@@ -1,10 +1,11 @@
-import { detectType,setStorage } from "./helper.js";
+import { detectType,setStorage,detectIcon } from "./helper.js";
 //which comes from html
 const form = document.querySelector("form");
 const list = document.querySelector("ul");
 console.log(list);
 //olay izleyiciler
 form.addEventListener("submit",handleSubmit);
+list.addEventListener("click",handleClick);
 
 //ortak kullanim alani
 var notes= JSON.parse(localStorage.getItem("notes")) || [];
@@ -15,7 +16,7 @@ var layerGroup = [];
 
 navigator.geolocation.getCurrentPosition(
     loadMap, 
-    console.log("Kabul edilmedi")
+    //console.log("Kabul edilmedi")
     );
 //Haritaya tıklayınca çalıştır.
 function onMapClick(e) {
@@ -25,9 +26,15 @@ function onMapClick(e) {
   console.log(coords);
 }
 
-function renderMarker(item) {
-console.log(item);
-};
+  function renderMarker(item) {
+    // markerı oluşturur
+    L.marker(item.coords, { icon: detectIcon(item.status) })
+      // imleçlerin olduğu katmanı ekler
+      .addTo(layerGroup)
+      // üzerine tıklanınca açılacak popup yapısını ekleme
+      .bindPopup(`${item.desc}`);
+  }
+;
 
 //kullanicinin konumuna göre ekrana haritayı getirme
 function loadMap(e) {
@@ -40,7 +47,7 @@ function loadMap(e) {
     //haritanın nasıl gözükeceğini belirliyor
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: ''
 }).addTo(map);
 // haritada ekrana basılacak imleçleri tutacağımız katman
 layerGroup = L.layerGroup().addTo(map);
@@ -50,18 +57,30 @@ renderNoteList(notes);
 //Haritada bir tıklanma olduğunda çalışacak fonksiyon
 map.on("click", onMapClick);
 }
+
+
+
+
+
 //formun gönderilme olayında çalışıyor.
 function handleSubmit(e) {
     e.preventDefault();
   console.log(e);
   const desc = e.target[0].value;
+  if(!desc) return; // içerikleri boşsa durdur fonksiyonu
   const date = e.target[1].value;
+  if(!date) return;
   const status = e.target[2].value;
+  if(!status) return;
   notes.push({id: new Date().getTime(),desc,date,status,coords});
   console.log(notes);
   //localstorageyi güncelle.
   setStorage(notes);
+  //5
+//renderNoteList fonksiyonuna notes dizisini gönderdik
   renderNoteList(notes);
+  //formu kapatma
+  form.style.display = "none";
 }
 //ekrana notları basma
 function renderNoteList(item) {
@@ -89,4 +108,21 @@ item.forEach((item) => {
 list.insertAdjacentElement("afterbegin", listElement);
 renderMarker(item);
 });
+}
+
+function handleClick(e) {
+  //güncellenecek elemanın id'sini öğrenme
+  const id = e.target.parentElement.parentElement.dataset.id;
+  console.log(e.target.id);
+  if(e.target.id === "delete"){
+    //idsini bildiğimiz elemanı diziden kaldırma
+    notes = notes.filter((note) => note.id != id);
+    //locali güncelle
+    setStorage(notes);
+    renderNoteList(notes);
+  }
+  if(e.target.id === "fly") {
+    const note = notes.find((note) => note.id= id);
+    map.flyTo(note.coords);
+  }
 }
