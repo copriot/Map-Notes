@@ -120,9 +120,9 @@ function handleClick(e) {
     //locali güncelle
     setStorage(notes);
     renderNoteList(notes);
-  }
+  };
   if(e.target.id === "fly") {
-    const note = notes.find((note) => note.id= id);
+    const note = notes.find((note) => note.id = id);
     map.flyTo(note.coords);
-  }
+  };
 }
