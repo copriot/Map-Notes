@@ -2,6 +2,10 @@ import { detectType,setStorage,detectIcon } from "./helper.js";
 //which comes from html
 const form = document.querySelector("form");
 const list = document.querySelector("ul");
+const sidebar = document.getElementById('sidebar');
+const openButton = document.querySelector('#openButton');
+const closeButton = document.querySelector('#closeButton');
+
 console.log(list);
 //olay izleyiciler
 form.addEventListener("submit",handleSubmit);
@@ -24,7 +28,7 @@ function onMapClick(e) {
   //  console.log(e);
   coords = [e.latlng.lat,e.latlng.lng];
   console.log(coords);
-}
+};
 
   function renderMarker(item) {
     // markerı oluşturur
@@ -33,8 +37,7 @@ function onMapClick(e) {
       .addTo(layerGroup)
       // üzerine tıklanınca açılacak popup yapısını ekleme
       .bindPopup(`${item.desc}`);
-  }
-;
+  };
 
 //kullanicinin konumuna göre ekrana haritayı getirme
 function loadMap(e) {
@@ -56,7 +59,7 @@ layerGroup = L.layerGroup().addTo(map);
 renderNoteList(notes);
 //Haritada bir tıklanma olduğunda çalışacak fonksiyon
 map.on("click", onMapClick);
-}
+};
 
 
 
@@ -81,11 +84,12 @@ function handleSubmit(e) {
   renderNoteList(notes);
   //formu kapatma
   form.style.display = "none";
-}
+};
 //ekrana notları basma
 function renderNoteList(item) {
   //notlar alanını temizler
 list.innerHTML = "";
+layerGroup.clearLayers();
 //herbir not için diziyi dön ve notlara aktar
 item.forEach((item) => {
   // console.log(item);
@@ -107,8 +111,9 @@ item.forEach((item) => {
 //console.log(listElement);
 list.insertAdjacentElement("afterbegin", listElement);
 renderMarker(item);
+
 });
-}
+};
 
 function handleClick(e) {
   //güncellenecek elemanın id'sini öğrenme
@@ -122,7 +127,22 @@ function handleClick(e) {
     renderNoteList(notes);
   };
   if(e.target.id === "fly") {
-    const note = notes.find((note) => note.id = id);
+    const note = notes.find((note) => note.id == id);
     map.flyTo(note.coords);
   };
-}
+};
+
+openButton.addEventListener ("click", openNote);
+closeButton.addEventListener ("click", closeNote);
+
+
+function closeNote() {
+
+  sidebar.style.display = "none";
+};
+
+function openNote() {
+  sidebar.style.display = "flex";
+};
+
+console.log(sidebar);

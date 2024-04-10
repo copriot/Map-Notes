@@ -18,9 +18,18 @@
 </head>
 
 <body>
+   
+    <aside class="aside" id="aside">
 
-    <aside>
-        <div class="sidebar">
+
+        <div class="btn-group">
+            <button id="closeButton" class="toggle-button" onclick="">Notları Kapat</button>
+    
+            <button id="openButton" class="toggle-button" onclick="">Notları Aç</button>
+         </div>
+
+
+        <div class="sidebar" id="sidebar">
             <h1>Notlar</h1>
             <form>
                 <div class="field">
@@ -117,7 +126,10 @@
  <!-- Make sure you put this AFTER Leaflet's CSS -->
  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
+     crossorigin="">
+    
+    
+    </script>
 
     <script src="main.js" type="module"></script>
 </body>

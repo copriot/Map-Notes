@@ -24,6 +24,36 @@ aside {
   height: 100vh;
   z-index: 989767;
 }
+
+.toggle-button {
+  margin-top: 50%;
+
+}
+#openButton {
+  background-color: green;
+  color: white;
+  border: none;
+  padding:8px;
+  border-radius: 25px;
+  transition: all 0.7s;
+}
+#openButton:hover {
+  transform: scale(0.85);
+}
+#closeButton {
+  background-color: red;
+  color: white;
+  padding: 8px;
+  border-radius: 25px;
+  border: none;
+  transition: all 0.7s;
+}
+#closeButton:hover {
+  transform: scale(0.85);
+}
+
+
+
 .sidebar {
   background-color: rgba(26, 225, 247, 0.394);
   height: 90vh;
@@ -31,7 +61,7 @@ aside {
   flex-direction: column;
   padding: 20px;
   width: 250px;
-  margin-top: 80px;
+  margin-top: 20px;
   margin-bottom: 10px;
   border-radius: 10px;
   transition: all 0.3s;
